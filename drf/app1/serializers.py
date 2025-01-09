@@ -1,14 +1,7 @@
 from io import __all__
 from rest_framework import serializers
-from .models import Employee,Intern,Student
+from .models import Intern,Student,Teacher,Manager
 
-
-
-class EmployeeSerializer(serializers.Serializer):
-    emp_id = serializers.IntegerField()
-    emp_name = serializers.CharField(max_length=100)
-    emp_city = serializers.CharField(max_length=100)
-    emp_phone = serializers.IntegerField()
 
 
 class StudentSerializer(serializers.Serializer):
@@ -44,7 +37,7 @@ class StudentSerializer(serializers.Serializer):
         return data
     
 
-#using model serializer we can turn above big line of code to the small one
+#using model serializer we can turn below big line of code to the small one
 
 
 # class internSerializer(serializers.Serializer):
@@ -72,8 +65,49 @@ class StudentSerializer(serializers.Serializer):
 
 
 class internSerializer(serializers.ModelSerializer):
+    #validation for name to make it read only
+   # intern_name = serializers.CharField(read_only = True)
+
+    #validators
+    # def start_with_r(value):
+    #     if value['0'].lower() != 'r':
+    #         raise serializers.ValidationError('Name Should Start With r')
+    # intern_name = serializers.CharField(start_with_r)
+
+
     class Meta:
         model = Intern
         fields = ['intern_id','intern_name','intern_city','intern_phone']
-
+    #we can also give validation here for multiple field
+       # read_only_fields = ['name','roll']
+    #    or
+    #     extra_kwargs = {'name':{'read_only':True}}
      
+     
+     
+    #Field Level Validation
+
+    # def validate_roll(self,value):
+    #     if value >=200:
+    #         raise serializers.ValidationError('Seat Full')
+    #     return value
+
+    # #Object Level Validation
+    # def validate(self,data):
+    #     nm = data.get('name')
+    #     ct = data.get('city')
+    #     if nm.lower() == 'samyak' and ct.lower() != 'dharashiv':
+    #         raise serializers.ValidationError('city must be dharashiv')
+    #     return data
+
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+       class Meta:
+            model = Teacher
+            fields = '__all__'
+
+class ManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manager
+        fields = '__all__'
