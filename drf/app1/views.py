@@ -1,17 +1,26 @@
+import io
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse,JsonResponse
-from app1.serializers import internSerializer,StudentSerializer,TeacherSerializer,ManagerSerializer
-from .models import Intern,Student,Teacher,Manager
+from app1.serializers import internSerializer,StudentSerializer\
+     ,TeacherSerializer,ManagerSerializer,LaptopSerializer,\
+     PhoneSerializer,MonitorSerializer
+from .models import Intern,Student,Teacher,Manager\
+     ,Laptop,Phone,Monitor
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.decorators import method_decorator
-import io
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin,CreateModelMixin,RetrieveModelMixin,DestroyModelMixin,UpdateModelMixin
+from rest_framework.generics import GenericAPIView,\
+     ListAPIView,CreateAPIView,RetrieveAPIView,UpdateAPIView,DestroyAPIView,\
+     ListCreateAPIView,RetrieveDestroyAPIView,\
+     RetrieveUpdateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.mixins import ListModelMixin,CreateModelMixin,\
+     RetrieveModelMixin,DestroyModelMixin,UpdateModelMixin
+from rest_framework import viewsets
+from rest_framework import status
 # Create your views here.
 
 class Name(View):
@@ -238,3 +247,105 @@ class ManagerRUD(GenericAPIView,DestroyModelMixin,UpdateModelMixin,RetrieveModel
      
      def get(self,request,*args, **kwargs):
           return self.retrieve(request,*args, **kwargs)
+     
+
+
+
+
+
+
+#Concrete View Class
+
+class LaptopList(ListAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+
+class LaptopCreate(CreateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+class LaptopRetrieve(RetrieveAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+class LaptopUpdate(UpdateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+class LaptopDelete(DestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+class LaptopLC(ListCreateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+class LaptopRU(RetrieveUpdateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+
+class LaptopRD(RetrieveDestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+ 
+
+class LaptopRUD(RetrieveUpdateDestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+
+
+
+     #ViewSet
+
+class PhoneViewSet(viewsets.ViewSet):
+     def list(self,request):
+          ph = Phone.objects.all()
+          seriailzer = PhoneSerializer(ph,many = True)
+          return Response(seriailzer.data)
+     def retrieve(self,request,pk = None):
+          id = pk
+          if id is not None:
+               ph = Phone.objects.get(id = id)
+               serializer = PhoneSerializer(ph)
+               return Response(serializer.data)
+          
+     def create(self,request):
+          serializer = PhoneSerializer(data=request.data)
+          if serializer.is_valid():
+               serializer.save()
+               return Response({'msg':'Data Created'},status=status.HTTP_201_CREATED)
+          return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+     
+     def update(self,request,pk):
+          id = pk
+          ph = Phone.objects.get(pk = id)
+          serializer = PhoneSerializer(ph,data=request.data)
+          if serializer.is_valid():
+               serializer.save()
+               return Response({'msg':'Complete Data Updated'})
+          return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+     
+     def partial_update(self,request,pk):
+          id = pk
+          ph = Phone.objects.get(pk = id)
+          serializer = PhoneSerializer(ph,data = request.data,partial = True)
+          if serializer.is_valid():
+               serializer.save()
+               return Response({'msg':'Partial Data Updated'})
+          return Response(serializer.errors)
+     def destroy(self,request,pk):
+          id = pk
+          ph = Phone.objects.get(pk = id)
+          ph.delete()
+          return Response({'msg':'Data Deleted'})
+     
+
+
+
+#ModelViewSet Class
+
+class MonitorModelViewSet(viewsets.ModelViewSet):
+     queryset = Monitor.objects.all()
+     serializer_class = MonitorSerializer

@@ -1,6 +1,6 @@
 from io import __all__
 from rest_framework import serializers
-from .models import Intern,Student,Teacher,Manager
+from .models import Intern,Student,Teacher,Manager,Laptop,Monitor,Phone
 
 
 
@@ -110,4 +110,22 @@ class TeacherSerializer(serializers.ModelSerializer):
 class ManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manager
+        fields = '__all__'
+
+
+class LaptopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Laptop
+        fields = '__all__'
+
+class PhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = '__all__'
+
+
+
+class MonitorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Monitor
         fields = '__all__'
