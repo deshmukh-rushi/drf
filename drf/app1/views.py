@@ -4,9 +4,9 @@ from django.views import View
 from django.http import HttpResponse,JsonResponse
 from app1.serializers import internSerializer,StudentSerializer\
      ,TeacherSerializer,ManagerSerializer,LaptopSerializer,\
-     PhoneSerializer,MonitorSerializer
+     PhoneSerializer,MonitorSerializer,CitySerializer
 from .models import Intern,Student,Teacher,Manager\
-     ,Laptop,Phone,Monitor
+     ,Laptop,Phone,Monitor,City
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.decorators import method_decorator
@@ -21,6 +21,12 @@ from rest_framework.mixins import ListModelMixin,CreateModelMixin,\
      RetrieveModelMixin,DestroyModelMixin,UpdateModelMixin
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.authentication import BasicAuthentication,SessionAuthentication,\
+     TokenAuthentication
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,IsAuthenticatedOrReadOnly\
+     ,DjangoModelPermissions,DjangoModelPermissionsOrAnonReadOnly,DjangoObjectPermissions
+from .CustomPermission import MyPermission
+from app1.customAuth import CutomAuth
 # Create your views here.
 
 class Name(View):
@@ -349,3 +355,72 @@ class PhoneViewSet(viewsets.ViewSet):
 class MonitorModelViewSet(viewsets.ModelViewSet):
      queryset = Monitor.objects.all()
      serializer_class = MonitorSerializer
+
+
+
+
+
+
+
+#####################################################################
+#####################################################################
+
+
+#Authentication and Permission
+
+
+#1 Basic Authentication:-
+
+# class CityModelViewSet(viewsets.ModelViewSet):
+#      queryset = City.objects.all()
+#      serializer_class = CitySerializer
+     # authentication_classes =[BasicAuthentication]
+     # permission_classes = [IsAuthenticated]
+
+#This is for the if we want to authentic for only a single model
+#we can also authenticate for every model
+#for that we need to add it in setting.py
+#I'll add basic authentication code in setting.py from line 134
+
+
+
+
+#2:- Session Authentication
+
+# class CityModelViewSet(viewsets.ModelViewSet):
+#      queryset = City.objects.all()
+#      serializer_class = CitySerializer
+#      authentication_classes =[SessionAuthentication]
+#      permission_classes = [MyPermission]
+
+          #in urls line 36
+
+
+
+
+ #2:- Token Authentication
+
+
+# class CityModelViewSet(viewsets.ModelViewSet):
+#      queryset = City.objects.all()
+#      serializer_class = CitySerializer
+#      authentication_classes =[TokenAuthentication]
+#      permission_classes = [IsAuthenticated]
+
+
+
+
+
+#####################################################################
+#####################################################################
+#Custom authentication
+
+#need to create a separte file need to overrideauthentication method
+
+
+class CityModelViewSet(viewsets.ModelViewSet):
+     queryset = City.objects.all()
+     serializer_class = CitySerializer
+     authentication_classes =[CutomAuth]
+     # permission_classes = [IsAuthenticated]
+

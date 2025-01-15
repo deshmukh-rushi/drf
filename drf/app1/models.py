@@ -1,5 +1,16 @@
 from django.db import models
 
+#####################################
+#for signal token auth
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+######################3
+
+
+
+
 # Create your models here.
 
 #used for normal api using third party application and browsable
@@ -50,3 +61,35 @@ class Monitor(models.Model):
     brand = models.CharField(max_length=50)
     year = models.IntegerField()
     condition = models.CharField(max_length=20)
+
+
+
+
+
+#####################################################################
+#####################################################################
+
+
+#Authentication and Permission
+
+
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
+    pincode = models.IntegerField()
+    country = models.CharField(max_length=20)
+
+
+#####################################################################
+#####################################################################
+
+
+#Signal auth Code
+
+
+@receiver(post_save,sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender,instance = None,created = False,**kwargs):
+    if created:
+        Token.objects.create(user=instance)
+

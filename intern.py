@@ -29,7 +29,7 @@ def post_data():
     r = requests.post(url = URL,headers=headers,data = json_data)
     data = r.json()
     print(data)
-#post_data()
+post_data()
 
 
 

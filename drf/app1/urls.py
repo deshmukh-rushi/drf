@@ -10,11 +10,19 @@ router = DefaultRouter()
 router.register('phoneapi',views.PhoneViewSet,basename='Phone')
 
 
+####################################
+
 #creating router object for ModelViewset
 Monitor_router = DefaultRouter()
 
 #Register PhoneViewSet with Router
 router.register('Monitorapi',views.MonitorModelViewSet,basename='Monitor')
+
+
+####################################
+
+
+
 
 urlpatterns = [
    path('name/',views.Name.as_view()),
@@ -22,6 +30,10 @@ urlpatterns = [
    path('sapi/',views.api.as_view()),
    path('iapi/',views.InternApi.as_view()),
    path('iapi/<int:pk>',views.InternApi.as_view()),
+
+   ##############################################
+
+
    # separate generic view:-
 
    path('tapi/',views.TeacherList.as_view()),
@@ -36,6 +48,8 @@ urlpatterns = [
    path('mapiRUD/<int:pk>/',views.ManagerRUD.as_view()),
 
 
+
+##############################
    #Concrete View Class(single)
    path('lapi/',views.LaptopList.as_view()),
    path('lapic/',views.LaptopCreate.as_view()),
@@ -47,11 +61,15 @@ urlpatterns = [
    path('lapiRD/<int:pk>/',views.LaptopRD.as_view()),
    path('lapiRUD/<int:pk>/',views.LaptopRUD.as_view()),
 
+
+####################################
    #ViewSetClass
    path('',include(router.urls)),
 
    #ModelViewSet Class
-   path('model/',include(Monitor_router.urls))
+   path('model/',include(Monitor_router.urls)),
+
+   
 
 ]
 
