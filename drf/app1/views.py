@@ -4,9 +4,9 @@ from django.views import View
 from django.http import HttpResponse,JsonResponse
 from app1.serializers import internSerializer,StudentSerializer\
      ,TeacherSerializer,ManagerSerializer,LaptopSerializer,\
-     PhoneSerializer,MonitorSerializer,CitySerializer
+     PhoneSerializer,MonitorSerializer,CitySerializer,DeveloperSerializer
 from .models import Intern,Student,Teacher,Manager\
-     ,Laptop,Phone,Monitor,City
+     ,Laptop,Phone,Monitor,City,Developer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.decorators import method_decorator
@@ -27,6 +27,11 @@ from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,IsAu
      ,DjangoModelPermissions,DjangoModelPermissionsOrAnonReadOnly,DjangoObjectPermissions
 from .CustomPermission import MyPermission
 from app1.customAuth import CutomAuth
+from rest_framework.throttling import AnonRateThrottle,UserRateThrottle,ScopedRateThrottle
+from app1.throttling import CityRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter,OrderingFilter
+from .pagination import MyPageNumberPagination,LimitOffsetPagination,CursorPagination
 # Create your views here.
 
 class Name(View):
@@ -262,44 +267,44 @@ class ManagerRUD(GenericAPIView,DestroyModelMixin,UpdateModelMixin,RetrieveModel
 
 #Concrete View Class
 
-class LaptopList(ListAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopList(ListAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
 
-class LaptopCreate(CreateAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopCreate(CreateAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
-class LaptopRetrieve(RetrieveAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopRetrieve(RetrieveAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
-class LaptopUpdate(UpdateAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopUpdate(UpdateAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
-class LaptopDelete(DestroyAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopDelete(DestroyAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
-class LaptopLC(ListCreateAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopLC(ListCreateAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
-class LaptopRU(RetrieveUpdateAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopRU(RetrieveUpdateAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
 
-class LaptopRD(RetrieveDestroyAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopRD(RetrieveDestroyAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
  
 
-class LaptopRUD(RetrieveUpdateDestroyAPIView):
-     queryset = Laptop.objects.all()
-     serializer_class = LaptopSerializer
+# class LaptopRUD(RetrieveUpdateDestroyAPIView):
+#      queryset = Laptop.objects.all()
+#      serializer_class = LaptopSerializer
 
 
 
@@ -413,6 +418,8 @@ class MonitorModelViewSet(viewsets.ModelViewSet):
 
 #####################################################################
 #####################################################################
+
+
 #Custom authentication
 
 #need to create a separte file need to overrideauthentication method
@@ -424,3 +431,166 @@ class CityModelViewSet(viewsets.ModelViewSet):
      authentication_classes =[CutomAuth]
      # permission_classes = [IsAuthenticated]
 
+
+
+#####################################################################
+#####################################################################
+
+#Throttle
+
+class CityModelViewSet(viewsets.ModelViewSet):
+     queryset = City.objects.all()
+     serializer_class = CitySerializer
+     # authentication_classes =[SessionAuthentication]
+     # permission_classes = [IsAuthenticatedOrReadOnly]
+     # throttle_classes= [AnonRateThrottle,CityRateThrottle ]
+
+
+
+
+
+#scope throttle
+     
+class LaptopList(ListAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+
+
+
+class LaptopCreate(CreateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'viewct'
+class LaptopRetrieve(RetrieveAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'viewct'
+
+class LaptopUpdate(UpdateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+class LaptopDelete(DestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+
+
+class LaptopLC(ListCreateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+class LaptopRU(RetrieveUpdateAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+
+class LaptopRD(RetrieveDestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+
+class LaptopRUD(RetrieveUpdateDestroyAPIView):
+     queryset = Laptop.objects.all()
+     serializer_class = LaptopSerializer
+     throttle_classes= [ScopedRateThrottle]
+     throttle_scope = 'modifyct'
+
+#############################################################
+#############################################################
+
+
+#Filtering
+#give data according to the user
+#user will get data only which are related to user
+
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+#      def get_queryset(self):
+#          user = self.request.user
+#          return Developer.objects.filter(passby=user)
+     
+
+# ###DjangoFIlterBackend
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+# #      filter_backends = [DjangoFilterBackend]
+# #      filterset_fields = ['name','city']
+
+
+
+
+
+# ##SearchFilter
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+#      filter_backends = [SearchFilter]
+#      search_fields = ['name','city']
+#      search_fields = ['^name']
+
+
+
+###OrderingFilter
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+#      filter_backends = [OrderingFilter]
+#      ordering_fields = ['name']
+     
+
+
+
+
+#############################################################
+#############################################################
+
+
+#Pagination
+#pageNumberPagination
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+#      pagination_class = MyPageNumberPagination
+#      filter_backends = [SearchFilter]
+#      # search_fields = ['name','city']
+#      search_fields = ['^name']
+
+
+
+
+#LimitOffsetPagination
+
+
+# class DeveloperList(ListAPIView):
+#      queryset = Developer.objects.all()
+#      serializer_class = DeveloperSerializer
+#      pagination_class = LimitOffsetPagination
+     
+
+
+
+
+#LimitOffsetPagination
+
+
+class DeveloperList(ListAPIView):
+     queryset = Developer.objects.all()
+     serializer_class = DeveloperSerializer
+     pagination_class = CursorPagination
+     

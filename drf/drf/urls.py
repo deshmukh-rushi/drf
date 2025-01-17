@@ -32,10 +32,13 @@ urlpatterns = [
    path('',include(router.urls)),
 
    #to use for login in session authentication
-   #we get login butto while accessing browsable api
+   #we get login button while accessing browsable api
    path('auth/',include('rest_framework.urls')),
 
    #token auth url for the user to generate his own token 
    path('gettoken/',obtain_auth_token),
+
+    #Filtering
+   path('Developer/',views.DeveloperList.as_view()),
 
 ]

@@ -93,3 +93,14 @@ def create_auth_token(sender,instance = None,created = False,**kwargs):
     if created:
         Token.objects.create(user=instance)
 
+#################################################
+#################################################
+
+#filtering
+
+class Developer(models.Model):
+    name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    passby=models.CharField(max_length=80)
+    

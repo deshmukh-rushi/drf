@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'app1',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,63 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'rest_framework.permissions.IsAuthenticated'
 #     ]
 # }
+
+
+###################################
+
+#Throttling global declaration
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_RATES':{
+        'anon':'2/day',
+        'user':'5/hour',
+        'city':'3/min',
+        'viewct':'5/hour',
+        'modifyct':'2/hour'
+    }
+}
+
+#####################################
+
+
+
+
+# #DjangoFilterBackend Global Setting
+
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_FILTER_BACKENDS':[
+#         'django_filters.rest_framework.DjangoFilterBackend'
+#         ]
+# }
+
+
+#############################################################
+#############################################################
+
+
+#Pagination
+
+#PageNumberPagination
+
+
+# REST_FRAMEWORK = {
+#      'DEFAULT_PAGINATION_CLASS':
+#          'rest_framework.pagination.PageNumberPagination',
+#          'PAGE_SIZE':3
+#      }
+
+
+
+
+#LimitOffSetPagination
+
+
+REST_FRAMEWORK = {
+     'DEFAULT_PAGINATION_CLASS':
+         'rest_framework.pagination.LimitOffsetPagination',
+         'PAGE_SIZE':3
+     }
+
+

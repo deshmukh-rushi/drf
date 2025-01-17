@@ -1,7 +1,7 @@
 from io import __all__
 from rest_framework import serializers
 from .models import Intern,Student,Teacher\
-    ,Manager,Laptop,Monitor,Phone,City
+    ,Manager,Laptop,Monitor,Phone,City,Developer
 
 
 
@@ -136,4 +136,9 @@ class MonitorSerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
+        fields = '__all__'
+
+class DeveloperSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Developer
         fields = '__all__'
