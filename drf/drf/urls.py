@@ -20,11 +20,20 @@ from app1 import urls,views
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
+
 #creating router object for ModelViewset
 router = DefaultRouter()
 
 #Register CityModelViewSet with Router
 router.register('Cityapi',views.CityModelViewSet,basename='City')
+
+Singer_router = DefaultRouter()
+Song_router = DefaultRouter()
+router.register('Singerapi',views.SingerViewset,basename='Singer')
+router.register('Songapi',views.SongViewset,basename='Song')
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('drf/',include('app1.urls')),
@@ -40,5 +49,11 @@ urlpatterns = [
 
     #Filtering
    path('Developer/',views.DeveloperList.as_view()),
+
+   path('',include(Song_router.urls)),
+
+   path('',include(Singer_router.urls)),
+
+   path('api/',include('app1.api.urls'))
 
 ]

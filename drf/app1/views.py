@@ -4,9 +4,10 @@ from django.views import View
 from django.http import HttpResponse,JsonResponse
 from app1.serializers import internSerializer,StudentSerializer\
      ,TeacherSerializer,ManagerSerializer,LaptopSerializer,\
-     PhoneSerializer,MonitorSerializer,CitySerializer,DeveloperSerializer
+     PhoneSerializer,MonitorSerializer,CitySerializer,DeveloperSerializer\
+     ,SingerSerializer,SongSerializer
 from .models import Intern,Student,Teacher,Manager\
-     ,Laptop,Phone,Monitor,City,Developer
+     ,Laptop,Phone,Monitor,City,Singer,song,Developer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.decorators import method_decorator
@@ -594,3 +595,17 @@ class DeveloperList(ListAPIView):
      serializer_class = DeveloperSerializer
      pagination_class = CursorPagination
      
+##########################################################
+##########################################################
+
+#Serializer relations
+
+class SingerViewset(viewsets.ModelViewSet):
+     queryset = Singer.objects.all()
+     serializer_class = SingerSerializer
+
+
+
+class SongViewset(viewsets.ModelViewSet):
+     queryset = song.objects.all()
+     serializer_class = SongSerializer

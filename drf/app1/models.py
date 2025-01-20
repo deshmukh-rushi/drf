@@ -104,3 +104,27 @@ class Developer(models.Model):
     city = models.CharField(max_length=50)
     passby=models.CharField(max_length=80)
     
+
+#####################################################
+#####################################################
+
+
+#serializer relation in drf
+#relatio between model
+
+class Singer(models.Model):
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+ 
+class song(models.Model):
+    title = models.CharField(max_length=50)
+    singer = models.ForeignKey(Singer,on_delete=models.CASCADE,related_name='song')
+    duration = models.IntegerField()
+
+
+    def __str__(self):
+        return self.title

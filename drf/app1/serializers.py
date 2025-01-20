@@ -1,7 +1,7 @@
 from io import __all__
 from rest_framework import serializers
 from .models import Intern,Student,Teacher\
-    ,Manager,Laptop,Monitor,Phone,City,Developer
+    ,Manager,Laptop,Monitor,Phone,City,Developer,Singer,song
 
 
 
@@ -142,3 +142,42 @@ class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
         fields = '__all__'
+
+
+
+
+
+
+
+#serializer relation in drf
+# #relatio between model
+# class SongSerializer(serializers.ModelSerializer):
+#     class  Meta:
+#         model = song
+#         fields = ['id','title','duration','singer']
+
+# class SingerSerializer(serializers.ModelSerializer):
+#     song = serializers.StringRelatedField(many = True,read_only = True)
+#     class  Meta:
+#         model = Singer
+#         fields = ['id','name','gender','song']
+
+
+
+
+
+#####################################################################
+###################################################################
+
+
+#nested Serializer
+class SongSerializer(serializers.ModelSerializer):
+    class  Meta:
+        model = song
+        fields = ['id','title','duration']
+
+class SingerSerializer(serializers.ModelSerializer):
+    song = SongSerializer(many = True,read_only = True)
+    class  Meta:
+        model = Singer
+        fields = ['id','name','gender','song']

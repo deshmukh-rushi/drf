@@ -1,6 +1,6 @@
 from django.contrib import admin
 from app1.models import Intern,Student,\
-    Teacher,Manager,Laptop,Phone,Monitor,City,Developer
+    Teacher,Manager,Laptop,Phone,Monitor,City,Developer,Singer,song
 # Register your models here.
 
 
@@ -46,3 +46,15 @@ class CityAdmin(admin.ModelAdmin):
 @admin.register(Developer)
 class DeveloperAdmin(admin.ModelAdmin):
     list_display = ['id','name','designation','city','passby']
+
+
+
+@admin.register(Singer)
+class DeveloperAdmin(admin.ModelAdmin):
+    list_display = ['id','name','gender']
+
+
+
+@admin.register(song)
+class DeveloperAdmin(admin.ModelAdmin):
+    list_display = ['id','title','singer','duration']
